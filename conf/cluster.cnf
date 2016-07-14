@@ -1,0 +1,15 @@
+[mysqld]
+# Cluster node configurations
+# innodb_buffer_pool_size=400M
+
+# Mandatory settings to enable Galera
+wsrep_on=ON
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+binlog_format=ROW
+default-storage-engine=InnoDB
+innodb_autoinc_lock_mode=2
+innodb_doublewrite=1
+query_cache_size=0
+
+# Galera synchronisation configuration
+wsrep_sst_method=rsync
