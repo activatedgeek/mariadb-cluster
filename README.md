@@ -37,7 +37,7 @@ split-brain scenario). The service definitions are in [`docker-compose.yml`](./d
 
 **WARNING**: The bootstrap node must be allowed to init completely before
 adding more nodes to the cluster (hence not using `docker-compose up -d` directly).
-If not enough time give, it strangely goes into a deadlock and crashes.
+If not given enough time, it strangely goes into a deadlock and crashes.
 
 ### Check cluster size
 
