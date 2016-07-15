@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+  boot:
+    image: activatedgeek/mariadb:devel
+    build:
+      context: .
+    command:
+      - "--wsrep-cluster-name=mariadb-test-cluster"
+      - "--wsrep-cluster-address=gcomm://"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+
+  node:
+    depends_on:
+      - boot
+    image: activatedgeek/mariadb:devel
+    build:
+      context: .
+    links:
+      - boot
+    command:
+      - "--wsrep-cluster-name=mariadb-test-cluster"
+      - "--wsrep-cluster-address=gcomm://boot"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123

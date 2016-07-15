@@ -33,10 +33,11 @@ $ make up
 ```
 
 This script will start a 3-node cluster (the minimum recommended to prevent a
-split-brain scenario).
+split-brain scenario). The service definitions are in [`docker-compose.yml`](./docker-compose.yml).
 
-The [`up.sh`](./up.sh) bash script contains simple `docker run` commands with Docker
-links for communication across the 3 nodes.
+**WARNING**: The bootstrap node must be allowed to init completely before
+adding more nodes to the cluster (hence not using `docker-compose up -d` directly).
+If not enough time give, it strangely goes into a deadlock and crashes.
 
 ### Check cluster size
 
@@ -44,7 +45,7 @@ links for communication across the 3 nodes.
 $ make check
 ```
 
-**NOTE**: This asks for MySQL root password which is `123` (seen in `up.sh` script).
+**NOTE**: This asks for MySQL root password which is `123`.
 
 The expected output should be:
 ```
