@@ -1,8 +1,10 @@
 [mysqld]
-# Cluster node configurations
-# innodb_buffer_pool_size=400M
+max_connections = 300
+table_open_cache = 600
+innodb_buffer_pool_size = 512M
+# performance-schema = false
 
-# Mandatory settings to enable Galera
+# Galera settings
 wsrep_on=ON
 wsrep_provider=/usr/lib/galera/libgalera_smm.so
 binlog_format=ROW
