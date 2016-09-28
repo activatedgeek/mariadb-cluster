@@ -6,23 +6,21 @@ services:
     build:
       context: .
     command:
-      - "--wsrep-cluster-name=mariadb-test-cluster"
+      - "--wsrep-cluster-name=test_cluster"
+      # @TODO this should never be empty will cause problems during restart
       - "--wsrep-cluster-address=gcomm://"
-    restart: always
+      - "--wsrep-new-cluster"
     environment:
-      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_ROOT_PASSWORD: abc123
 
   node:
-    depends_on:
-      - boot
     image: activatedgeek/mariadb:devel
     build:
       context: .
     links:
       - boot
     command:
-      - "--wsrep-cluster-name=mariadb-test-cluster"
+      - "--wsrep-cluster-name=test_cluster"
       - "--wsrep-cluster-address=gcomm://boot"
-    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_ROOT_PASSWORD: abc123

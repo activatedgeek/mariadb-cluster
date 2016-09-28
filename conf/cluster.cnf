@@ -1,17 +1,12 @@
 [mysqld]
-max_connections = 300
-table_open_cache = 600
-innodb_buffer_pool_size = 512M
-# performance-schema = false
-
-# Galera settings
-wsrep_on=ON
-wsrep_provider=/usr/lib/galera/libgalera_smm.so
 binlog_format=ROW
-default-storage-engine=InnoDB
+bind-address=0.0.0.0
+default_storage_engine=innodb
 innodb_autoinc_lock_mode=2
-innodb_doublewrite=1
+innodb_flush_log_at_trx_commit=0
+innodb_buffer_pool_size=122M
 query_cache_size=0
-
-# Galera synchronisation configuration
+query_cache_type=0
+wsrep_on=ON
+wsrep_provider=/usr/lib/libgalera_smm.so
 wsrep_sst_method=rsync
