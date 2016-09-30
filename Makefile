@@ -3,8 +3,8 @@ devel:
 
 up:
 	@docker-compose up -d boot
-	@echo "Pausing 15 seconds to wait for bootstrap node full init.."
-	@sleep 15
+	@echo "Pausing 90 seconds to wait for bootstrap node full init.."
+	@sleep 90
 	@echo "Adding 2 nodes to the cluster.."
 	@docker-compose up -d node
 	@docker-compose scale node=2
