@@ -2,27 +2,43 @@ version: '2'
 
 services:
   boot:
-    image: activatedgeek/mariadb:devel
-    build:
-      context: .
+    image: activatedgeek/mariadb:10.1
     command:
-      - "--wsrep-cluster-name=test_cluster"
-      # @TODO this should never be empty will cause problems during restart
+      - "--wsrep-cluster-name=${WSREP_CLUSTER_NAME}"
       - "--wsrep-cluster-address=gcomm://"
+      - "--wsrep-sst-auth=${WSREP_SST_AUTH}"
       - "--wsrep-new-cluster"
+    volumes:
+      - "./data/boot:/var/lib/mysql:rw"
     environment:
-      MYSQL_ROOT_PASSWORD: abc123
-      MYSQL_INITDB_SKIP_TZINFO: "yes"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
 
-  node:
-    image: activatedgeek/mariadb:devel
-    build:
-      context: .
+  node1:
+    image: activatedgeek/mariadb:10.1
     links:
       - boot
     command:
       - "--wsrep-cluster-name=test_cluster"
       - "--wsrep-cluster-address=gcomm://boot"
+      - "--wsrep-sst-auth=${WSREP_SST_AUTH}"
+    volumes:
+      - "./data/node1:/var/lib/mysql:rw"
     environment:
-      MYSQL_ROOT_PASSWORD: abc123
-      MYSQL_INITDB_SKIP_TZINFO: "yes"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      # prevent hanging init node
+      MYSQL_CREATE_DATADIR: '1'
+
+  node2:
+    image: activatedgeek/mariadb:10.1
+    links:
+      - boot
+    command:
+      - "--wsrep-cluster-name=test_cluster"
+      - "--wsrep-cluster-address=gcomm://boot"
+      - "--wsrep-sst-auth=${WSREP_SST_AUTH}"
+    volumes:
+      - "./data/node2:/var/lib/mysql:rw"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      # prevent hanging init node
+      MYSQL_CREATE_DATADIR: '1'

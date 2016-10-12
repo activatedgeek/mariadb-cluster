@@ -9,6 +9,9 @@ service discovery for multi-host clusters (cluster on a single-host won't
 make sense anyways) and some careful configurations, it should be ready for
 production.
 
+See [activatedgeek/mariadb](https://hub.docker.com/r/activatedgeek/mariadb/) for
+the docker image used.
+
 ## Aim
 
 * All cluster-wide and client communication via SSL/TLS
@@ -16,15 +19,6 @@ production.
 * Understand and add memory related configurations like `innodb_buffer_pool_size`
 
 ## Usage
-
-### Build the Docker image
-
-```
-$ make devel
-```
-
-The Docker file adds a `cluster.cnf` over the official `MariaDB` (10.x) image
-to enable Galera replication.
 
 ### Start the cluster
 
@@ -37,15 +31,13 @@ split-brain scenario). The service definitions are in [`docker-compose.yml`](./d
 
 **WARNING**: The bootstrap node must be allowed to init completely before
 adding more nodes to the cluster (hence not using `docker-compose up -d` directly).
-If not given enough time, it strangely goes into a deadlock and crashes.
+If not given enough time, it goes into a deadlock and crashes.
 
 ### Check cluster size
 
 ```
 $ make check
 ```
-
-**NOTE**: This asks for MySQL root password which is `123`.
 
 The expected output should be:
 ```
@@ -71,6 +63,11 @@ $ make down
 ```
 
 This will delete the docker image as well as the three containers.
+
+To delete the data,
+```
+$ make clean
+```
 
 ## Have ideas?
 
