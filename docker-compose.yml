@@ -12,6 +12,7 @@ services:
       - "--wsrep-new-cluster"
     environment:
       MYSQL_ROOT_PASSWORD: abc123
+      MYSQL_INITDB_SKIP_TZINFO: "yes"
 
   node:
     image: activatedgeek/mariadb:devel
@@ -24,3 +25,4 @@ services:
       - "--wsrep-cluster-address=gcomm://boot"
     environment:
       MYSQL_ROOT_PASSWORD: abc123
+      MYSQL_INITDB_SKIP_TZINFO: "yes"
