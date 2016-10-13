@@ -1,7 +1,7 @@
 up:
 	@docker-compose up -d boot
-	@echo "Pausing 90 seconds to wait for bootstrap node init.."
-	@sleep 90
+	@echo "Pausing 60 seconds to wait for bootstrap node init.."
+	@sleep 60
 	@echo "Adding nodes to the cluster.."
 	@docker-compose up -d node1 node2
 
