@@ -3,11 +3,18 @@ version: '2'
 services:
   boot:
     image: activatedgeek/mariadb:10.1
+    container_name: maria_boot
     command:
       - "--wsrep-cluster-name=${WSREP_CLUSTER_NAME}"
-      - "--wsrep-cluster-address=gcomm://"
+      # for recovery use "?pc.wait_prim=no"
+      - "--wsrep-cluster-address=${WSREP_CLUSTER_ADDRESS}"
+      # only for recovery
+      # - "--wsrep-provider-options=\"pc.bootstrap=true\""
       - "--wsrep-sst-auth=${WSREP_SST_AUTH}"
       - "--wsrep-new-cluster"
+    networks:
+      mariadb:
+        ipv4_address: 172.43.43.10
     volumes:
       - "./data/boot:/var/lib/mysql:rw"
     environment:
@@ -15,12 +22,14 @@ services:
 
   node1:
     image: activatedgeek/mariadb:10.1
-    links:
-      - boot
+    container_name: maria_node1
     command:
-      - "--wsrep-cluster-name=test_cluster"
-      - "--wsrep-cluster-address=gcomm://boot"
+      - "--wsrep-cluster-name=${WSREP_CLUSTER_NAME}"
+      - "--wsrep-cluster-address=${WSREP_CLUSTER_ADDRESS}"
       - "--wsrep-sst-auth=${WSREP_SST_AUTH}"
+    networks:
+      mariadb:
+        ipv4_address: 172.43.43.11
     volumes:
       - "./data/node1:/var/lib/mysql:rw"
     environment:
@@ -30,15 +39,26 @@ services:
 
   node2:
     image: activatedgeek/mariadb:10.1
-    links:
-      - boot
+    container_name: maria_node2
     command:
-      - "--wsrep-cluster-name=test_cluster"
-      - "--wsrep-cluster-address=gcomm://boot"
+      - "--wsrep-cluster-name=${WSREP_CLUSTER_NAME}"
+      - "--wsrep-cluster-address=${WSREP_CLUSTER_ADDRESS}"
       - "--wsrep-sst-auth=${WSREP_SST_AUTH}"
+    networks:
+      mariadb:
+        ipv4_address: 172.43.43.12
     volumes:
       - "./data/node2:/var/lib/mysql:rw"
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       # prevent hanging init node
       MYSQL_CREATE_DATADIR: '1'
+
+networks:
+  mariadb:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.43.43.0/24
+          gateway: 172.43.43.1

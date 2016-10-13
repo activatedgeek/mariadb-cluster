@@ -6,7 +6,9 @@ up:
 	@docker-compose up -d node1 node2
 
 check:
-	@docker exec -it mariadbcluster_boot_1 mysql -p123 -e 'show status like "wsrep_%"'
+	@docker exec -it maria_boot mysql -p123 -e 'show status like "wsrep%"'
+	@docker exec -it maria_node1 mysql -p123 -e 'show status like "wsrep%"'
+	@docker exec -it maria_node2 mysql -p123 -e 'show status like "wsrep%"'
 
 down:
 	@docker-compose down
